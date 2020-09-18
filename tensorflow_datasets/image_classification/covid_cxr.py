@@ -143,17 +143,22 @@ class CovidCxr(tfds.core.GeneratorBasedBuilder):
       The image and its corresponding label.
       
     """
-    for label in _LABELS:       
+    files = tf.io.gfile.listdir(datapath)
+    for file in files:
+        os.chdir(os.path.join(datapath, file))
+        for label in _LABELS:
+                glob_path = os.path.join(label, "*.png")                
+                for fpath in tf.io.gfile.glob(glob_path):
+                            fname = os.path.basename(fpath)
+                            record = {
+                                "image": fpath,
+                                "image/filename": fname,
+                                "label": label,
+                            }
 
-        glob_path = os.path.join(datapath, label, "*.png")
-        for fpath in tf.io.gfile.glob(glob_path):
-                    fname = os.path.basename(fpath)
-                    record = {
-                        "image": fpath,
-                        "image/filename": fname,
-                        "label": label,
-                    }
-        yield "{}/{}".format(label, fname), record
+                yield "{}/{}".format(label, fname), record
+                
   
+
 
 
