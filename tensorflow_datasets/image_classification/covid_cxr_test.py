@@ -1,24 +1,21 @@
 """covid_cxr dataset."""
 
-import tensorflow_datasets.public_api as tfds
 from tensorflow_datasets.image_classification import covid_cxr
+import tensorflow_datasets.testing as tfds_test
 
-
-class CovidCxrTest(tfds.testing.DatasetBuilderTestCase):
-  # TODO(covid_cxr):
-  DATASET_CLASS = covid_cxr.CovidCxr
-  SPLITS = {
-      "train": 3,  # Number of fake train example
-      "test": 1,  # Number of fake test example
-  }
-
-  # If you are calling `download/download_and_extract` with a dict, like:
-  #   dl_manager.download({'some_key': 'http://a.org/out.txt', ...})
-  # then the tests needs to provide the fake output paths relative to the
-  # fake data directory
-  # DL_EXTRACT_RESULT = {'some_key': 'output_file1.txt', ...}
-
-
+class CovidCxrTest(tfds_test.DatasetBuilderTestCase):
+    DATASET_CLASS = covid_cxr.CovidCxr
+    
+    BUILDER_CONFIG_NAMES_TO_TEST = ['224']
+    
+    SKIP_CHECKSUMS = True
+        
+    SPLITS = {"train": 3,
+              "test": 3,}   
+    
+    DL_EXTRACT_RESULT = ['train_224',  'test_224']
+    
 if __name__ == "__main__":
-  tfds.testing.test_main()
-
+    tfds_test.test_main()
+                                    
+                                    
